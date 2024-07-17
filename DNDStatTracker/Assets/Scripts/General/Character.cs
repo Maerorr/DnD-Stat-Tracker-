@@ -32,6 +32,8 @@ public class Character
     public string armorProficiencies;
     public string toolsProficiencies;
 
+    public Money money;
+
     public static Character Default()
     {
         return new Character
@@ -57,6 +59,7 @@ public class Character
             weaponsProficiencies = "Simple and Martial weapons.",
             armorProficiencies = "Light and Medium armor.",
             toolsProficiencies = "Thieves' tools",
+            money = new Money(10, 10, 10, 10, 10),
         };
     }
 

@@ -12,6 +12,7 @@ public class StatTracker : MonoBehaviour
     public ArmorHealthSpeed achpspeed;
     public HP hp;
     public HitDiceDeathSaves hitdicedeathsaves;
+    public MoneyDisplay money;
 
     private void Start()
     {
@@ -28,6 +29,7 @@ public class StatTracker : MonoBehaviour
         achpspeed.SetCharacter(currentCharacter);
         hp.SetCharacter(currentCharacter);
         hitdicedeathsaves.SetCharacter(currentCharacter);
+        money.SetCharacter(currentCharacter);
     }
 
     public void UpdateHP()
@@ -38,5 +40,10 @@ public class StatTracker : MonoBehaviour
     public void UpdateHitDieAndDeathSaves()
     {
         hitdicedeathsaves.SetCharacter(currentCharacter);
+    }
+
+    public void UpdateMoney()
+    {
+        money.SetCharacter(currentCharacter);
     }
 }
