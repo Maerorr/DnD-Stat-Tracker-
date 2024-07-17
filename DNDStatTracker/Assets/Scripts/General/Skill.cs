@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public struct Skills
 {
     public Dictionary<string, Skill> skills;
+    public int proficiencyBonus;
+    public Character character;
 
     public static Skills Default()
     {
@@ -57,6 +58,16 @@ public struct Skills
     public StatType GetBaseStat(SkillType skillType)
     {
         return skills[skillType.GetName()].baseAbility;
+    }
+
+    public int GetSkillTotalMod(SkillType skillType)
+    {
+        int mod = 0;
+        Skill temp = skills[skillType.GetDictionaryName()];
+        mod += character.stats.stats[temp.baseAbility.GetName().Trim()].Mod;
+        if (temp.proficiency) mod += proficiencyBonus;
+        mod += temp.other_bonus;
+        return mod;
     }
 }
 
@@ -127,6 +138,34 @@ public static class SkillTypeExtensions
             SkillType.Survival => "Survival",
             _ => throw new ArgumentOutOfRangeException(nameof(skill), skill, null)
         };
+    }
+
+    public static string GetDictionaryName(this SkillType skill)
+    {
+        {
+            return skill switch
+            {
+                SkillType.Acrobatics => "Acrobatics",
+                SkillType.AnimalHandling => "AnimalHandling",
+                SkillType.Arcana => "Arcana",
+                SkillType.Athletics => "Athletics",
+                SkillType.Deception => "Deception",
+                SkillType.History => "History",
+                SkillType.Insight => "Insight",
+                SkillType.Intimidation => "Intimidation",
+                SkillType.Investigation => "Investigation",
+                SkillType.Medicine => "Medicine",
+                SkillType.Nature => "Nature",
+                SkillType.Perception => "Perception",
+                SkillType.Performance => "Performance",
+                SkillType.Persuasion => "Persuasion",
+                SkillType.Religion => "Religion",
+                SkillType.SleightOfHand => "SleightOfHand",
+                SkillType.Stealth => "Stealth",
+                SkillType.Survival => "Survival",
+                _ => throw new ArgumentOutOfRangeException(nameof(skill), skill, null)
+            };
+        }
     }
 
     public static StatType GetBaseStat(this SkillType skill)

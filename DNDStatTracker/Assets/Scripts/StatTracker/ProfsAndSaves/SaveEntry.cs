@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -13,7 +11,8 @@ public class SaveEntry : MonoBehaviour
     {
         saveName.text = stat.GetName();
         saveName.color = stat.GetStatColor();
-        saveMod.text = $"{mod}";
+        string sign = mod > 0 ? "+" : "";
+        saveMod.text = $"({sign}{mod})";
         checkbox.SetActive(proficiency);
     }
 }

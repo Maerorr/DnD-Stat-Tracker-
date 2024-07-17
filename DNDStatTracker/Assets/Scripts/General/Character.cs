@@ -64,9 +64,16 @@ public class Character
             hitDiceTotal = new Dice(12, 10),
             hitDiceUsed = new Dice(12, 1),
             inspiration = false,
-            proficiencyBonus = 5,
+            proficiencyBonus = Utils.ProficiencyBonus(10),
             stats = Stats.Default(),
             skills = Skills.Default(),
         };
+    }
+
+    public void Init()
+    {
+        proficiencyBonus = Utils.ProficiencyBonus(level);
+        skills.proficiencyBonus = proficiencyBonus;
+        skills.character = this;
     }
 }

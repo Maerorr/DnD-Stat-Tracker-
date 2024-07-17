@@ -16,14 +16,16 @@ public class SavingThrowsSpawner : MonoBehaviour
         }
     }
     
-    public void SpawnEntries(Stats stats)
+    public void SpawnEntries(Stats stats, int profBonus)
     {
         foreach (var stat in stats.stats)
         {
             Stat tempStat = stat.Value;
             var statEntry = Instantiate(savesEntryPrefab, spawnRoot);
             statEntry.name = "STAT_" + stat.Value.StatType.GetName();
-            statEntry.GetComponent<SaveEntry>().SetEntryData(tempStat.StatType, tempStat.Value, tempStat.SaveProficiency);
+            int mod = tempStat.Mod;
+            if (tempStat.SaveProficiency) mod += profBonus;
+            statEntry.GetComponent<SaveEntry>().SetEntryData(tempStat.StatType, mod, tempStat.SaveProficiency);
         }
     }
 }
