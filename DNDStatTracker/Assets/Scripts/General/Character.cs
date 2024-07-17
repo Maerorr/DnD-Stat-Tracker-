@@ -10,7 +10,7 @@ public class Character
     public Class characterClass;
 
     public int experience;
-    public int baseArmorClass;
+    public int armorClass;
     public int initiativeBonus;
     public int speed;
 
@@ -27,25 +27,10 @@ public class Character
     public Stats stats;
     public Skills skills;
 
-    /*public Character(string characterName, int level, Class characterClass, int experience, int baseArmorClass, int initiativeBonus, int speed, int maxHp, int currentHp, int temporaryHp, Dice hitDiceTotal, Dice hitDiceUsed, bool inspiration, int proficiencyBonus, Stats stats, Skills skills)
-    {
-        this.characterName = characterName;
-        this.level = level;
-        this.characterClass = characterClass;
-        this.experience = experience;
-        this.baseArmorClass = baseArmorClass;
-        this.initiativeBonus = initiativeBonus;
-        this.speed = speed;
-        maxHP = maxHp;
-        currentHP = currentHp;
-        temporaryHP = temporaryHp;
-        this.hitDiceTotal = hitDiceTotal;
-        this.hitDiceUsed = hitDiceUsed;
-        this.inspiration = inspiration;
-        this.proficiencyBonus = proficiencyBonus;
-        this.stats = stats;
-        this.skills = skills;
-    }*/
+    public string languageProficiencies;
+    public string weaponsProficiencies;
+    public string armorProficiencies;
+    public string toolsProficiencies;
 
     public static Character Default()
     {
@@ -55,18 +40,22 @@ public class Character
             level = 10,
             characterClass = Class.Barbarian,
             experience = 123456,
-            baseArmorClass = 15,
+            armorClass = 15,
             initiativeBonus = 5,
             speed = 30,
             maxHP = 50,
             currentHP = 45,
-            temporaryHP = 5,
+            temporaryHP = 0,
             hitDiceTotal = new Dice(12, 10),
             hitDiceUsed = new Dice(12, 1),
             inspiration = false,
             proficiencyBonus = Utils.ProficiencyBonus(10),
             stats = Stats.Default(),
             skills = Skills.Default(),
+            languageProficiencies = "Common, Sylvan, Gnommish.",
+            weaponsProficiencies = "Simple and Martial weapons.",
+            armorProficiencies = "Light and Medium armor.",
+            toolsProficiencies = "Thieves' tools",
         };
     }
 
@@ -75,5 +64,16 @@ public class Character
         proficiencyBonus = Utils.ProficiencyBonus(level);
         skills.proficiencyBonus = proficiencyBonus;
         skills.character = this;
+        stats.proficiencyBonus = proficiencyBonus;
+    }
+
+    public int GetTotalArmorClass()
+    {
+        return armorClass + stats.stats["Dexterity"].Mod;
+    }
+
+    public int GetTotalInitiative()
+    {
+        return initiativeBonus + stats.stats["Dexterity"].Mod;
     }
 }

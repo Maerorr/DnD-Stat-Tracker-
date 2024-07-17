@@ -4,17 +4,24 @@ public class ProficienciesSpawner : MonoBehaviour
 {
     public GameObject proficienciesSpawner;
     public Transform spawnRoot;
+    private Character currentCharacter;
     
-    private void Awake()
+    private void ClearEntries()
     {
-        // clear the children
         foreach (Transform child in spawnRoot.transform)
         {
             Destroy(child.gameObject);
         }
     }
+
+    public void SetCharacter(Character character)
+    {
+        currentCharacter = character;
+        ClearEntries();
+        SpawnEntries(currentCharacter.skills);
+    }
     
-    public void SpawnEntries(Skills skills)
+    private void SpawnEntries(Skills skills)
     {
         foreach (var skill in skills.skills)
         {

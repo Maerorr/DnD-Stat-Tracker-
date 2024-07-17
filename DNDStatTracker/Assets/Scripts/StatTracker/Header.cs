@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,7 +12,21 @@ public class Header : MonoBehaviour
     [SerializeField] private TextMeshProUGUI characterClass;
     [SerializeField] private TextMeshProUGUI characterExperience;
 
-    public void SetHeaderData(string characterName, int level, int profBonus, Class characterClass, int exp)
+    private Character currentCharacter;
+
+    public void SetCharacter(Character character)
+    {
+        currentCharacter = character;
+        SetHeaderData(
+            currentCharacter.characterName,
+            currentCharacter.level,
+            currentCharacter.proficiencyBonus,
+            currentCharacter.characterClass,
+            currentCharacter.experience
+            );
+    }
+
+    private void SetHeaderData(string characterName, int level, int profBonus, Class characterClass, int exp)
     {
         this.characterName.text = $"Name: {characterName}";
         this.characterLevel.text = $"Level: {level}";

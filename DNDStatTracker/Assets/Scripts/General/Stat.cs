@@ -4,7 +4,8 @@ using UnityEngine;
 public class Stats
 {
     public Dictionary<string, Stat> stats;
-
+    public int proficiencyBonus;
+    
     public static Stats Default()
     {
         return new Stats

@@ -5,16 +5,24 @@ public class StatsSpawner : MonoBehaviour
     public GameObject statsEntryPrefab;
     public Transform spawnRoot;
 
-    private void Awake()
+    private Character currentCharacter;
+
+    private void ClearEntries()
     {
-        // clear the children
         foreach (Transform child in spawnRoot.transform)
         {
             Destroy(child.gameObject);
         }
     }
 
-    public void SpawnEntries(Stats stats)
+    public void SetCharacter(Character character)
+    {
+        currentCharacter = character;
+        ClearEntries();
+        SpawnEntries(currentCharacter.stats);
+    }
+
+    private void SpawnEntries(Stats stats)
     {
         foreach (var stat in stats.stats)
         {
