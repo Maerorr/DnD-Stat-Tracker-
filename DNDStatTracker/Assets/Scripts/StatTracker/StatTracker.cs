@@ -11,6 +11,7 @@ public class StatTracker : MonoBehaviour
     public LanguagesAndProficiencies languagesAndProficiencies;
     public ArmorHealthSpeed achpspeed;
     public HP hp;
+    public HitDiceDeathSaves hitdicedeathsaves;
 
     private void Start()
     {
@@ -26,10 +27,16 @@ public class StatTracker : MonoBehaviour
         
         achpspeed.SetCharacter(currentCharacter);
         hp.SetCharacter(currentCharacter);
+        hitdicedeathsaves.SetCharacter(currentCharacter);
     }
 
     public void UpdateHP()
     {
         hp.SetCharacter(currentCharacter);
+    }
+
+    public void UpdateHitDieAndDeathSaves()
+    {
+        hitdicedeathsaves.SetCharacter(currentCharacter);
     }
 }

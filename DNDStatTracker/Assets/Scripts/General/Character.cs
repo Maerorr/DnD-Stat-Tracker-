@@ -19,8 +19,8 @@ public class Character
     public int temporaryHP;
 
     public Dice hitDiceTotal;
-    public Dice hitDiceUsed;
-    // public DeathSaves deathSaves;
+    public Dice hitDiceLeft;
+    public DeathSaves deathSaves;
     public bool inspiration;
 
     public int proficiencyBonus;
@@ -47,7 +47,8 @@ public class Character
             currentHP = 45,
             temporaryHP = 0,
             hitDiceTotal = new Dice(12, 10),
-            hitDiceUsed = new Dice(12, 1),
+            hitDiceLeft = new Dice(12, 9),
+            deathSaves = new DeathSaves(),
             inspiration = false,
             proficiencyBonus = Utils.ProficiencyBonus(10),
             stats = Stats.Default(),
