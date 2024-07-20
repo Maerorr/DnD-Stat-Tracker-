@@ -15,4 +15,9 @@ public class SaveEntry : MonoBehaviour
         saveMod.text = $"({sign}{mod})";
         checkbox.SetActive(proficiency);
     }
+
+    public string GetName()
+    {
+        return saveName.text;
+    }
 }

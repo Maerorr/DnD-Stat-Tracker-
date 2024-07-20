@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class Stats
 {
     public Dictionary<string, Stat> stats;
@@ -28,6 +30,7 @@ public class Stats
     }
 }
 
+[Serializable]
 public class Stat
 {
     private StatType stat;
@@ -89,6 +92,7 @@ public class Stat
     }
  }
 
+[Serializable]
 public enum StatType
 {
     Strength,

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 
+[Serializable]
 public struct Skills
 {
     public Dictionary<string, Skill> skills;
     public int proficiencyBonus;
+    [NonSerialized]
     public Character character;
 
     public static Skills Default()
@@ -28,7 +30,7 @@ public struct Skills
                 {"Performance", new Skill(StatType.Charisma, SkillType.Performance, false, true, 0)},
                 {"Persuasion", new Skill(StatType.Charisma, SkillType.Persuasion, true, false, 0)},
                 {"Religion", new Skill(StatType.Intelligence, SkillType.Religion, false, false, 0)},
-                {"SleightOfHand", new Skill(StatType.Dexterity, SkillType.SleightOfHand, false, false, 0)},
+                {"SleightofHand", new Skill(StatType.Dexterity, SkillType.SleightOfHand, false, false, 0)},
                 {"Stealth", new Skill(StatType.Dexterity, SkillType.Stealth, false, false, 0)},
                 {"Survival", new Skill(StatType.Wisdom, SkillType.Survival, false, false, 0)}
             }
@@ -71,7 +73,7 @@ public struct Skills
     }
 }
 
-
+[Serializable]
 public class Skill
 {
     public StatType baseAbility;
@@ -90,6 +92,7 @@ public class Skill
     }
 }
 
+[Serializable]
 public enum SkillType
 {
     Acrobatics,
@@ -160,7 +163,7 @@ public static class SkillTypeExtensions
                 SkillType.Performance => "Performance",
                 SkillType.Persuasion => "Persuasion",
                 SkillType.Religion => "Religion",
-                SkillType.SleightOfHand => "SleightOfHand",
+                SkillType.SleightOfHand => "SleightofHand",
                 SkillType.Stealth => "Stealth",
                 SkillType.Survival => "Survival",
                 _ => throw new ArgumentOutOfRangeException(nameof(skill), skill, null)

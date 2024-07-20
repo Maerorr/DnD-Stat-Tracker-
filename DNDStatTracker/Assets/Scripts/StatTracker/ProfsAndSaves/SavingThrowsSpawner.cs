@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +7,7 @@ public class SavingThrowsSpawner : MonoBehaviour
     public Transform spawnRoot;
 
     private Character currectCharacter;
+    private List<SaveEntry> spawnedEntries = new List<SaveEntry>();
     
     private void ClearEntries() {
         // clear the children
@@ -23,6 +23,17 @@ public class SavingThrowsSpawner : MonoBehaviour
         ClearEntries();
         SpawnEntries(currectCharacter.stats);
     }
+
+    public void UpdateSaves()
+    {
+        foreach (var entry in spawnedEntries)
+        {
+            var save = currectCharacter.stats.stats[Utils.RemoveStringWhitespace(entry.GetName())];
+            int mod = save.Mod;
+            if (save.SaveProficiency) mod += currectCharacter.stats.proficiencyBonus;
+            entry.SetEntryData(save.StatType, mod, save.SaveProficiency);
+        }
+    }
     
     private void SpawnEntries(Stats stats)
     {
@@ -33,7 +44,10 @@ public class SavingThrowsSpawner : MonoBehaviour
             statEntry.name = "STAT_" + stat.Value.StatType.GetName();
             int mod = tempStat.Mod;
             if (tempStat.SaveProficiency) mod += stats.proficiencyBonus;
-            statEntry.GetComponent<SaveEntry>().SetEntryData(tempStat.StatType, mod, tempStat.SaveProficiency);
+
+            SaveEntry e = statEntry.GetComponent<SaveEntry>();
+            e.SetEntryData(tempStat.StatType, mod, tempStat.SaveProficiency);
+            spawnedEntries.Add(e);
         }
     }
 }

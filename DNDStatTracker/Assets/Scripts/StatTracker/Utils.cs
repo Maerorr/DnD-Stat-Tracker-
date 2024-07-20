@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using UnityEngine;
 
 public static class Utils
@@ -129,5 +131,12 @@ public static class Utils
             default:
                 return 0;
         }
+    }
+
+    public static string RemoveStringWhitespace(string s)
+    {
+        return new string(s.ToCharArray()
+            .Where(c => !Char.IsWhiteSpace(c))
+            .ToArray());
     }
 }

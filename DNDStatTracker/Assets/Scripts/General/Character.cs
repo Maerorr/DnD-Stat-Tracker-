@@ -1,8 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using Newtonsoft.Json;
 
+[Serializable]
 public class Character
 {
     public string characterName;
@@ -31,11 +31,55 @@ public class Character
     public string weaponsProficiencies;
     public string armorProficiencies;
     public string toolsProficiencies;
-
+    
     public Money money;
+    
+    public String featuresAndTraits;
 
+    [JsonIgnore]
+    public Spells spellList;
+
+    public List<int> spellSlotsMax;
+    public List<int> spellSlotsUsed;
+    
     public static Character Default()
     {
+        Spells spellList = new Spells();
+        Spell spell1 = new Spell
+        {
+            name = "Test Spell 1 with very long name that should be 2 lines",
+            level = 0,
+            school = SchoolOfMagic.Abjuration,
+            castingTime = "1 round",
+            range = "30ft",
+            target = "self",
+            components = "V,S,M",
+            duration = "1 minute",
+            description =
+                "a long-ass spell description that says everything\nthere is to\nsay about this complex spell.",
+            higherLevels = "nothing, cant be cast at higher levels",
+            classes = new List<Class> { Class.Cleric, Class.Cleric },
+            ritual = false,
+        };
+        spellList.AddSpell(spell1, true);
+        spell1 = new Spell
+        {
+            name = "Test Spell 2",
+            level = 1,
+            school = SchoolOfMagic.Dunamancy,
+            castingTime = "instant",
+            range = "45ft",
+            target = "self",
+            components = "V,S,M",
+            duration = "1 minute",
+            description =
+                "a long-ass spell description that says everything\nthere is to\nsay about this complex spell.",
+            higherLevels = "nothing, cant be cast at higher levels",
+            classes = new List<Class> { Class.Cleric, Class.Cleric },
+            ritual = false,
+        };
+        spellList.AddSpell(spell1, true);
+        
         return new Character
         {
             characterName = "Default Name",
@@ -59,7 +103,12 @@ public class Character
             weaponsProficiencies = "Simple and Martial weapons.",
             armorProficiencies = "Light and Medium armor.",
             toolsProficiencies = "Thieves' tools",
+            featuresAndTraits =
+                "Feats:\n-Keen Mind\n- You know which way is north\n- You can recall every bit of information you came across from the past month.",
             money = new Money(10, 10, 10, 10, 10),
+            spellList = spellList,
+            spellSlotsMax = new List<int>{4, 3, 2, 1, 0, 0, 0, 0, 0},
+            spellSlotsUsed = new List<int>{2, 1, 2, 0, 0, 0, 0, 0, 0},
         };
     }
 

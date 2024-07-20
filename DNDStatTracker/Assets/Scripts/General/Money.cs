@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 
+[Serializable]
 public class Money
 {
     public Dictionary<string, int> money;

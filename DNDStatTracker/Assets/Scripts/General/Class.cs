@@ -1,5 +1,6 @@
 using System;
 
+[Serializable]
 public enum Class
 {
     Barbarian,
