@@ -84,11 +84,13 @@ public class Stat
     public void AddOne()
     {
         value += 1;
+        mod = Utils.StatToMod(value);
     }
 
     public void SubtractOne()
     {
         value -= 1;
+        mod = Utils.StatToMod(value);
     }
  }
 

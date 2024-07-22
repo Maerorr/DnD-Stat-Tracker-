@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 public class Spells
 {
@@ -68,6 +66,16 @@ public class Spells
         return list;
     }
 
+    public Spell GetSpellOfLevelByName(int level, string name)
+    {
+        if (level == 0)
+        {
+            return cantrips[name].Item1;
+        }
+
+        return spells[level - 1][name].Item1;
+    }
+    
     public void RemoveSpellOfLevel(Spell spell, int level)
     {
         if (spell.level == 0)
@@ -126,4 +134,20 @@ public static class SchoolOfMagicExtensions
             SchoolOfMagic.Dunamancy => "Dunamancy",
         };
     } 
+}
+
+public class JsonSpell
+{
+    public string name;
+    public int level;
+    public string school;
+    public string castingTime;
+    public string range;
+    public string target;
+    public string components;
+    public string duration;
+    public string description;
+    public string higherLevels;
+    public List<string> classes;
+    public bool ritual;
 }

@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpellDisplay : MonoBehaviour
+public class SpellDisplay : MonoBehaviour, IEditable
 {
     [SerializeField] private GameObject spells012Root;
     [SerializeField] private GameObject spells345Root;
@@ -11,6 +9,10 @@ public class SpellDisplay : MonoBehaviour
 
     [SerializeField] private GameObject spellEntryPrefab;
     [SerializeField] private GameObject spellLevelSeparatorPrefab;
+
+    [SerializeField] private GameObject spellAddPrefab;
+    private List<GameObject> spawnedSpellAdds = new List<GameObject>();
+    [SerializeField] private SpellPicker spellPicker;
     
     private Character c;
     private StatTracker st;
@@ -24,6 +26,8 @@ public class SpellDisplay : MonoBehaviour
     {
         c = character;
         SpawnSpells();
+        spawnedSpellAdds.ForEach(entry => entry.SetActive(false));
+        spellPicker.SetCharacter(character);
     }
 
     private void Clear()
@@ -58,6 +62,9 @@ public class SpellDisplay : MonoBehaviour
             var spellEntry = Instantiate(spellEntryPrefab, spells012Root.transform);
             spellEntry.GetComponent<SpellEntry>().SetSpell(cantrip.Item1, cantrip.Item2);
         }
+        var spellAdd = Instantiate(spellAddPrefab, spells012Root.transform);
+        spellAdd.GetComponent<SpellAddEntry>().SetData(0, spellPicker);
+        spawnedSpellAdds.Add(spellAdd);
 
         level++;
         // SPELLS LEVEL 1
@@ -71,6 +78,9 @@ public class SpellDisplay : MonoBehaviour
             var spellEntry = Instantiate(spellEntryPrefab, spells012Root.transform);
             spellEntry.GetComponent<SpellEntry>().SetSpell(spell.Item1, spell.Item2);
         }
+        spellAdd = Instantiate(spellAddPrefab, spells012Root.transform);
+        spellAdd.GetComponent<SpellAddEntry>().SetData(1, spellPicker);
+        spawnedSpellAdds.Add(spellAdd);
         
         level++;
         // SPELLS LEVEL 2
@@ -84,6 +94,9 @@ public class SpellDisplay : MonoBehaviour
             var spellEntry = Instantiate(spellEntryPrefab, spells012Root.transform);
             spellEntry.GetComponent<SpellEntry>().SetSpell(spell.Item1, spell.Item2);
         }
+        spellAdd = Instantiate(spellAddPrefab, spells012Root.transform);
+        spellAdd.GetComponent<SpellAddEntry>().SetData(2, spellPicker);
+        spawnedSpellAdds.Add(spellAdd);
         
         level++;
         // SPELLS LEVEL 3
@@ -97,6 +110,9 @@ public class SpellDisplay : MonoBehaviour
             var spellEntry = Instantiate(spellEntryPrefab, spells345Root.transform);
             spellEntry.GetComponent<SpellEntry>().SetSpell(spell.Item1, spell.Item2);
         }
+        spellAdd = Instantiate(spellAddPrefab, spells345Root.transform);
+        spellAdd.GetComponent<SpellAddEntry>().SetData(3, spellPicker);
+        spawnedSpellAdds.Add(spellAdd);
         
         level++;
         // SPELL LEVEL 4
@@ -110,6 +126,9 @@ public class SpellDisplay : MonoBehaviour
             var spellEntry = Instantiate(spellEntryPrefab, spells345Root.transform);
             spellEntry.GetComponent<SpellEntry>().SetSpell(spell.Item1, spell.Item2);
         }
+        spellAdd = Instantiate(spellAddPrefab, spells345Root.transform);
+        spellAdd.GetComponent<SpellAddEntry>().SetData(4, spellPicker);
+        spawnedSpellAdds.Add(spellAdd);
         
         level++;
         // SPELLS LEVEL 5
@@ -123,6 +142,9 @@ public class SpellDisplay : MonoBehaviour
             var spellEntry = Instantiate(spellEntryPrefab, spells345Root.transform);
             spellEntry.GetComponent<SpellEntry>().SetSpell(spell.Item1, spell.Item2);
         }
+        spellAdd = Instantiate(spellAddPrefab, spells345Root.transform);
+        spellAdd.GetComponent<SpellAddEntry>().SetData(5, spellPicker);
+        spawnedSpellAdds.Add(spellAdd);
         
         level++;
         // SPELLS LEVEL 6
@@ -136,6 +158,9 @@ public class SpellDisplay : MonoBehaviour
             var spellEntry = Instantiate(spellEntryPrefab, spells6789Root.transform);
             spellEntry.GetComponent<SpellEntry>().SetSpell(spell.Item1, spell.Item2);
         }
+        spellAdd = Instantiate(spellAddPrefab, spells6789Root.transform);
+        spellAdd.GetComponent<SpellAddEntry>().SetData(6, spellPicker);
+        spawnedSpellAdds.Add(spellAdd);
         
         level++;
         // SPELLS LEVEL 7
@@ -149,6 +174,9 @@ public class SpellDisplay : MonoBehaviour
             var spellEntry = Instantiate(spellEntryPrefab, spells6789Root.transform);
             spellEntry.GetComponent<SpellEntry>().SetSpell(spell.Item1, spell.Item2);
         }
+        spellAdd = Instantiate(spellAddPrefab, spells6789Root.transform);
+        spellAdd.GetComponent<SpellAddEntry>().SetData(7, spellPicker);
+        spawnedSpellAdds.Add(spellAdd);
         
         level++;
         // SPELLS LEVEL 8
@@ -162,6 +190,9 @@ public class SpellDisplay : MonoBehaviour
             var spellEntry = Instantiate(spellEntryPrefab, spells6789Root.transform);
             spellEntry.GetComponent<SpellEntry>().SetSpell(spell.Item1, spell.Item2);
         }
+        spellAdd = Instantiate(spellAddPrefab, spells6789Root.transform);
+        spellAdd.GetComponent<SpellAddEntry>().SetData(8, spellPicker);
+        spawnedSpellAdds.Add(spellAdd);
         
         level++;
         // SPELLS LEVEL 6
@@ -175,5 +206,13 @@ public class SpellDisplay : MonoBehaviour
             var spellEntry = Instantiate(spellEntryPrefab, spells6789Root.transform);
             spellEntry.GetComponent<SpellEntry>().SetSpell(spell.Item1, spell.Item2);
         }
+        spellAdd = Instantiate(spellAddPrefab, spells6789Root.transform);
+        spellAdd.GetComponent<SpellAddEntry>().SetData(9, spellPicker);
+        spawnedSpellAdds.Add(spellAdd);
+    }
+
+    public void ToggleEditMode(bool edit)
+    {
+        spawnedSpellAdds.ForEach(entry => entry.SetActive(edit));
     }
 }

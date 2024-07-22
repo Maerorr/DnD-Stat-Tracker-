@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class HP : MonoBehaviour
+public class HP : MonoBehaviour, IEditable
 {
     [SerializeField] private TextMeshProUGUI maxHP;
     [SerializeField] private TextMeshProUGUI currentHP;
     [SerializeField] private TextMeshProUGUI tempHP;
     [SerializeField] private TMP_InputField input;
+    [SerializeField] private GameObject maxHPButton;
+    [SerializeField] private List<GameObject> buttons;
     private int currentInput;
     
     private Character c;
@@ -18,6 +20,7 @@ public class HP : MonoBehaviour
     private void Start()
     {
         st = FindAnyObjectByType<StatTracker>();
+        maxHPButton.SetActive(false);
     }
 
     public void SetCharacter(Character character)
@@ -35,7 +38,14 @@ public class HP : MonoBehaviour
             currentInput = 0;
         } else 
         {
-            currentInput = int.Parse(input);
+            try
+            {
+                currentInput = int.Parse(input);
+                Debug.Log(currentInput);
+            }
+            // because the Input Field component already is set for integer type, the only exception triggering possibility
+            // is user typing '-' before a number to input a negative number. That's why we ignore the exception
+            catch (Exception _) { }
         }
     }
 
@@ -98,6 +108,14 @@ public class HP : MonoBehaviour
         st.UpdateHP();
     }
 
+    public void AddMaxHP()
+    {
+        int temp = currentInput;
+        c.maxHP += temp;
+        c.maxHP = Math.Clamp(c.maxHP, 0, int.MaxValue);
+        st.UpdateHP();
+    }
+    
     public void SubtractTempHP()
     {
         int temp = currentInput;
@@ -106,5 +124,10 @@ public class HP : MonoBehaviour
         c.temporaryHP = Math.Clamp(c.temporaryHP, 0, int.MaxValue);
         st.UpdateHP();
     }
-    
+
+    public void ToggleEditMode(bool edit)
+    {
+        maxHPButton.SetActive(edit);
+        buttons.ForEach(button => button.SetActive(!edit));
+    }
 }

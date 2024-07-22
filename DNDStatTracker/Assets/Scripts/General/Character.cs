@@ -84,10 +84,10 @@ public class Character
         {
             characterName = "Default Name",
             level = 10,
-            characterClass = Class.Barbarian,
+            characterClass = Class.Wizard,
             experience = 123456,
-            armorClass = 15,
-            initiativeBonus = 5,
+            armorClass = 10,
+            initiativeBonus = 0,
             speed = 30,
             maxHP = 50,
             currentHP = 45,
@@ -128,5 +128,10 @@ public class Character
     public int GetTotalInitiative()
     {
         return initiativeBonus + stats.stats["Dexterity"].Mod;
+    }
+
+    public void AddOneToStat(string statName)
+    {
+        stats.stats[statName].AddOne();
     }
 }

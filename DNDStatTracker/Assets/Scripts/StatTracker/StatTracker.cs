@@ -24,6 +24,7 @@ public class StatTracker : MonoBehaviour
     private List<IEditable> editableElements;
 
     private bool isEditMode = false;
+    public Spells spellDatabase;
 
     private void Start()
     {
@@ -49,12 +50,20 @@ public class StatTracker : MonoBehaviour
         SaveCharacter();
 
         StartCoroutine(GetEditables());
+        LoadSpellDatabase();
     }
 
     IEnumerator GetEditables()
     {
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSecondsRealtime(0.1f);
         editableElements = FindObjectOfType<Canvas>().gameObject.GetComponentsInChildren<IEditable>().ToList();
+    }
+
+    public void UpdateStats()
+    {
+        statsSpawner.UpdateStatEntries();
+        UpdateProficiencies(); // update the mods
+        UpdateACInitSpeed(); // dex can change AC and Initiative
     }
     
     public void UpdateHP()
@@ -78,6 +87,16 @@ public class StatTracker : MonoBehaviour
         proficienciesSpawner.UpdateSkillProficiencies();
     }
 
+    public void UpdateACInitSpeed()
+    {
+        achpspeed.SetCharacter(currentCharacter);
+    }
+
+    public void UpdateSpells()
+    {
+        spells.SetCharacter(currentCharacter);
+    }
+    
     public void SaveCharacter()
     {
         string characterJson = JsonConvert.SerializeObject(currentCharacter, Formatting.Indented);
@@ -97,9 +116,30 @@ public class StatTracker : MonoBehaviour
             }
         });
     }
-    
-    /*public void UpdateFeatures()
+
+    private void LoadSpellDatabase()
     {
-        featuresAndTraits.SetCharacter();
-    }*/
+        spellDatabase = new Spells();
+        string basePath = Application.persistentDataPath;
+        for (int i = 0; i < 9; i++)
+        {
+            string jsonPath = basePath + $"/SpellsDatabase/spell_level_{i}.json";
+            string jsontext = System.IO.File.ReadAllText(jsonPath);
+            Spell[] spells = JsonConvert.DeserializeObject<Spell[]>(jsontext);
+            Dictionary<string, (Spell, bool)> spellsDict = new Dictionary<string, (Spell, bool)>();
+            foreach (var spell in spells)
+            {
+                spellsDict.Add(spell.name, (spell, false));
+            }
+
+            if (i == 0)
+            {
+                spellDatabase.cantrips = spellsDict;
+            }
+            else
+            {
+                spellDatabase.spells[i - 1] = spellsDict;
+            }
+        }
+    }
 }
