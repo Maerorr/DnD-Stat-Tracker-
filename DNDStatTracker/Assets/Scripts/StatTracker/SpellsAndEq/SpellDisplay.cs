@@ -13,6 +13,8 @@ public class SpellDisplay : MonoBehaviour, IEditable
     [SerializeField] private GameObject spellAddPrefab;
     private List<GameObject> spawnedSpellAdds = new List<GameObject>();
     [SerializeField] private SpellPicker spellPicker;
+
+    private bool editMode = false;
     
     private Character c;
     private StatTracker st;
@@ -30,8 +32,15 @@ public class SpellDisplay : MonoBehaviour, IEditable
         spellPicker.SetCharacter(character);
     }
 
+    public void UpdateSpells()
+    {
+        SpawnSpells();
+        spawnedSpellAdds.ForEach(entry => entry.SetActive(editMode));
+    }
+
     private void Clear()
     {
+        spawnedSpellAdds.Clear();
         foreach (Transform child in spells012Root.transform)
         {
             Destroy(child.gameObject);
@@ -213,6 +222,7 @@ public class SpellDisplay : MonoBehaviour, IEditable
 
     public void ToggleEditMode(bool edit)
     {
+        editMode = edit;
         spawnedSpellAdds.ForEach(entry => entry.SetActive(edit));
     }
 }

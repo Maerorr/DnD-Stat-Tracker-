@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class StatTracker : MonoBehaviour
@@ -26,11 +27,18 @@ public class StatTracker : MonoBehaviour
     private bool isEditMode = false;
     public Spells spellDatabase;
 
+    private StateController sc;
+
     private void Start()
     {
-        currentCharacter = Character.Default();
-        currentCharacter.Init();
-        
+        sc = FindAnyObjectByType<StateController>();
+        //currentCharacter = Character.Default();
+        //currentCharacter.Init();
+        LoadSpellDatabase();
+    }
+
+    public void SetCharacter()
+    {
         header.SetCharacter(currentCharacter);
         statsSpawner.SetCharacter(currentCharacter);
         
@@ -47,15 +55,12 @@ public class StatTracker : MonoBehaviour
         
         spells.SetCharacter(currentCharacter);
         
-        SaveCharacter();
-
         StartCoroutine(GetEditables());
-        LoadSpellDatabase();
     }
 
     IEnumerator GetEditables()
     {
-        yield return new WaitForSecondsRealtime(0.1f);
+        yield return new WaitForNextFrameUnit();
         editableElements = FindObjectOfType<Canvas>().gameObject.GetComponentsInChildren<IEditable>().ToList();
     }
 
@@ -94,17 +99,38 @@ public class StatTracker : MonoBehaviour
 
     public void UpdateSpells()
     {
-        spells.SetCharacter(currentCharacter);
+        //spells.SetCharacter(currentCharacter);
+        spells.UpdateSpells();
     }
     
     public void SaveCharacter()
     {
+        currentCharacter.PreSerialization();
+        foreach (var spell in currentCharacter.serializeSpellData)
+        {
+            Debug.Log($"{spell.Item1}, prepared: {spell.Item2}");
+        }
         string characterJson = JsonConvert.SerializeObject(currentCharacter, Formatting.Indented);
         string filename =
             $"{currentCharacter.characterName}_{currentCharacter.characterClass.GetName()}_{currentCharacter.level}.json";
-        System.IO.File.WriteAllText(Application.persistentDataPath + $"/{filename}", characterJson);
+        System.IO.File.WriteAllText(Application.persistentDataPath + $"/Characters/{filename}", characterJson);
     }
 
+    public void LoadCharacter(string path)
+    {
+        string json = System.IO.File.ReadAllText(path);
+        currentCharacter = JsonConvert.DeserializeObject<Character>(json);
+        currentCharacter.PostDeserialization(spellDatabase);
+        sc.ChangeToStats();
+        SetCharacter();
+    }
+
+    public void SaveAndChangeCharacter()
+    {
+        SaveCharacter();
+        sc.ChangeToCharacterSelection();
+    }
+    
     public void OnToggleEdit()
     {
         isEditMode ^= true;
@@ -121,7 +147,7 @@ public class StatTracker : MonoBehaviour
     {
         spellDatabase = new Spells();
         string basePath = Application.persistentDataPath;
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i <= 9; i++)
         {
             string jsonPath = basePath + $"/SpellsDatabase/spell_level_{i}.json";
             string jsontext = System.IO.File.ReadAllText(jsonPath);

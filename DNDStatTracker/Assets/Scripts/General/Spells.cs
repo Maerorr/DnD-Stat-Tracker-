@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Spells
 {
@@ -74,6 +75,24 @@ public class Spells
         }
 
         return spells[level - 1][name].Item1;
+    }
+
+    public Spell GetSpellByName(string name)
+    {
+        if (cantrips.ContainsKey(name))
+        {
+            return cantrips[name].Item1;
+        }
+
+        foreach (var level in spells)
+        {
+            if (level.ContainsKey(name))
+            {
+                return level[name].Item1;
+            }
+        }
+        Debug.Log($"Spell of name {name} could not be found!");
+        return new Spell();
     }
     
     public void RemoveSpellOfLevel(Spell spell, int level)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using UnityEngine;
 
 [Serializable]
 public class Character
@@ -38,6 +39,9 @@ public class Character
 
     [JsonIgnore]
     public Spells spellList;
+
+    // (spell name, is prepared)
+    public List<(string, bool)> serializeSpellData = new List<(string, bool)>();
 
     public List<int> spellSlotsMax;
     public List<int> spellSlotsUsed;
@@ -118,6 +122,34 @@ public class Character
         skills.proficiencyBonus = proficiencyBonus;
         skills.character = this;
         stats.proficiencyBonus = proficiencyBonus;
+    }
+
+    public void PreSerialization()
+    {
+        serializeSpellData.Clear();
+        foreach (var cantrip in spellList.cantrips.Values)
+        {
+            serializeSpellData.Add((cantrip.Item1.name, cantrip.Item2));
+        }
+
+        foreach (var spellLevel in spellList.spells)
+        {
+            foreach (var spell in spellLevel.Values)
+            {
+                serializeSpellData.Add((spell.Item1.name, spell.Item2));
+            }
+        }
+    }
+
+    public void PostDeserialization(Spells db)
+    {
+        Init();
+        spellList = new Spells();
+        foreach (var serializedSpell in serializeSpellData)
+        {
+            Debug.Log($"trying to load {serializedSpell.Item1}");
+            spellList.AddSpell(db.GetSpellByName(serializedSpell.Item1), serializedSpell.Item2);
+        }
     }
 
     public int GetTotalArmorClass()
